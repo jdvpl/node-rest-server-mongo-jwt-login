@@ -49,6 +49,8 @@ const userPost=async(req, res) => {
 const userDelete=async(req, res) => {
   const {id} = req.params
 
+  const uid=req.uid;
+  console.log(uid)
   // /boarrar fisicamente no recomendable
   // const usuario =await User.findByIdAndDelete(id)
   const usuario =await User.findByIdAndUpdate(id,{ status:false})
