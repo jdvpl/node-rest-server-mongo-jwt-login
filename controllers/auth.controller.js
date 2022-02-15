@@ -1,9 +1,38 @@
 const { response } = require("express");
+const Usuario=require("../models/user");
+const bcryptjs=require("bcryptjs")
 
+const login=async(req,res=response)=>{
+  const {email,password}=req.body;
 
-const login=(req,res=response)=>{
+  try {
+    // verificar si el correo existe
+    const user=await Usuario.findOne({ email});
 
-  res.json({msg:"Login ok"})
+    if(!user){
+      return res.status(400).json({msg: 'Usuario no existe'})
+    }
+
+    // verificar si el usaurio esta activo
+    if(!user.status){
+      return res.status(400).json({msg: 'Este usuario esta inactivo'})
+    }
+
+    // verificar la contraseña
+    const validPassword=bcryptjs.compareSync(password, user.password);
+
+    if(!validPassword){
+      return res.status(400).json({
+        msg: 'Contraseña erronea'
+      })
+    }
+    // generar el JWT
+    res.json({msg:"Login ok"})
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({msg: 'Hubo un error al loguearse'})
+  }
+  
 }
 
 module.exports = {login};
