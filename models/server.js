@@ -6,6 +6,7 @@ class Server{
     this.app = express();
     this.port = process.env.PORT || 3000;
     this.usuariosRuta='/api/users';
+    this.authRuta='/api/auth';
     // conectar a la base de datos
     this.conectarDb()
     // middleware: son funcionalidads para el webserver
@@ -20,6 +21,7 @@ class Server{
 
   routes() {
     this.app.use(this.usuariosRuta, require('../routes/user.routes'))
+    this.app.use(this.authRuta, require('../routes/auth.routes'))
   }
   listen() {
     this.app.listen(this.port, () => {
