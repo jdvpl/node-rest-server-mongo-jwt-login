@@ -1,7 +1,8 @@
 const { response, request } = require('express');
 const jwt=require('jsonwebtoken');
+const Usuario= require("../models/user");
 
-const validarJWT=(req=request,res=response,next) => {
+const validarJWT=async(req=request,res=response,next) => {
 
   const token=req.header('x-token');
   if (!token) {
@@ -13,6 +14,17 @@ const validarJWT=(req=request,res=response,next) => {
     const {uid}=jwt.verify(token,process.env.SECRETORPUBLICKEY);
 
     req.uid=uid;
+    const user=await Usuario.findById(uid);
+
+    if (!user){
+      return res.status(401).json({msg: 'No existe este usuario'});
+
+    }
+    // verificar i el uid estado es true
+    if (!user.status) {
+      return res.status(401).json({msg: 'Este Usuario no tiene permisos para eliminar usuario '})
+    }
+    req.user=user;
 
     next();
   } catch (error) {
