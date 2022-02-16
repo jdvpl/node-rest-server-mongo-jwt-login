@@ -8,3 +8,12 @@ Continuacion del servidor anterior que era basico en este si incluye bases de da
 
 ### Quitar algo de git que se haya subido y se coloco en el gitignore
 ``` git rm .env --cached ```
+
+
+### agregar a otro repositorios al mismo tiempo
+``` git remote add heroku https://git.heroku.com/jdvpl-rest-server-node.git ```
+
+
+### crear variables de entorno en heroku
+
+``` heroku config:Set name_variable="*******" ```
